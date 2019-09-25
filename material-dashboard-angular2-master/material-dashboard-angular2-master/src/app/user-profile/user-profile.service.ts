@@ -13,7 +13,7 @@ import { of } from 'rxjs/observable/of';
 export class UserService {
 
   private usersUrl =  'http://localhost:49547/api/user';
-
+  public userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

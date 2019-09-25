@@ -5,12 +5,11 @@ export class User {
     Gender: string;
     EmailAddress: string;
     Password:string;
-    UserNotification:[
+    UserNotifications:[
         {
           NotificationId: number;
           Message: string;
           UserId: number;
-          User: {};
         }
       ]
   }

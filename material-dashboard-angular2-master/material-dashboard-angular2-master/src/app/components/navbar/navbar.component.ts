@@ -10,7 +10,6 @@ import { UserService } from 'app/user-profile/user-profile.service'
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  providers : [UserService]
 })
 export class NavbarComponent implements OnInit {
     private listTitles: any[];
@@ -18,16 +17,20 @@ export class NavbarComponent implements OnInit {
       mobile_menu_visible: any = 0;
     private toggleButton: any;
     private sidebarVisible: boolean;
+    private notificationsCount: number;
 
     constructor(location: Location,  private element: ElementRef,  private userService: UserService,private router: Router,private route:ActivatedRoute) {
-      this.location = location;
-          this.sidebarVisible = false;
-         
-   
+        this.location = location;
+        this.sidebarVisible = false;
+        
     }
 
     ngOnInit(){
-     // this.userService.getUsers();
+        this.userService.userSubject.subscribe(x => {
+            if(x){
+                this.notificationsCount = x.UserNotifications.length;
+            }
+        });
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];

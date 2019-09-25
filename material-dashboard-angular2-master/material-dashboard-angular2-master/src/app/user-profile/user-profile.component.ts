@@ -14,7 +14,6 @@ import { catchError, map, tap } from 'rxjs/operators';
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css'],
-  providers:[UserService]
 })
 
 export class UserProfileComponent implements OnInit {
@@ -52,7 +51,10 @@ export class UserProfileComponent implements OnInit {
   //Fetch userdetails based on ID
   getUser(id: number): void {
       this.userService.getUser(id)
-      .subscribe(user => this.user = user);
+      .subscribe(user => {
+        this.user = user;
+        this.userService.userSubject.next(user);
+      });
     
   }
  

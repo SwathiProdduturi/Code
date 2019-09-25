@@ -45,7 +45,6 @@ namespace UserManagement.Web.Controllers
 		{
 			if (user != null && user.Id > 0)
 			{
-
                 return await PutUser(user.Id, user);
 			}
 			else
@@ -71,7 +70,8 @@ namespace UserManagement.Web.Controllers
             try
             {
                 await db.SaveChangesAsync();
-            }
+				await this.AddNotification("User updated", user.Id);
+			}
             catch (DbUpdateConcurrencyException)
             {
                 if (!UserExists(id))
@@ -94,7 +94,8 @@ namespace UserManagement.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
+            var userEntity = db.Users.Add(user);
+			await this.AddNotification("User added", userEntity.Id);
 
             try
             {
@@ -144,5 +145,30 @@ namespace UserManagement.Web.Controllers
         {
             return db.Users.Count(e => e.Id == id) > 0;
         }
+
+		private async Task<UserNotification> AddNotification(string message, int userId)
+		{
+			UserNotification userNotification = new UserNotification()
+			{
+				Message = message,
+				UserId = userId
+			};
+			try
+			{
+
+				var userNotificationEntity = db.UserNotifications.Add(userNotification);
+				await db.SaveChangesAsync();
+
+				return userNotificationEntity;
+
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
+			return null;
+		}
     }
 }
